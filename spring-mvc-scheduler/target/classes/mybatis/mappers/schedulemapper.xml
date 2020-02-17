@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="schedule">
+
+	<!-- 삽입 -->
+	<insert id="insert" parameterType="Schedule">
+		insert into user(username,userpw) values(#{username},#{userpw})
+	</insert>
+	
+	<!-- 유저 스케쥴 조회 -->
+	<select id="get" parameterType="java.lang.Integer" resultType="Subject">
+		select sc.subjectid, sb.subjectname, sb.starttime, sb.endtime, sb.wday, sb.color from schedule as sc join subject as sb on sc.subjectid = sb.subjectid where sc.userid = #{userid} order by sb.wday, sb.starttime desc
+	</select>
+
+	<!-- 유저 시간표 변경으로 인한 초기화 -->
+	<delete id="init" parameterType="java.lang.Integer">
+		delete from schedule where userid = #{userid}
+	</delete>
+	
+</mapper>

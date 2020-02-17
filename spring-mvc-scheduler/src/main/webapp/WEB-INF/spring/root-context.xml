@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+		
+	<!--DB 접속을 위한 DataSource Bean 생성-->
+	<bean class="org.springframework.jdbc.datasource.DriverManagerDataSource" id="dataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property value="jdbc:mysql://192.168.0.131:3306/scheduler?useUnicode=true&amp;characterEncoding=utf8&amp;characterSetResults=utf8" name="url" />
+		<property value="kinggodhoon" name="username" />
+		<property value="Root**119" name="password" />
+	</bean>
+		
+	<!-- Mybatis 설정 -->
+	<!-- sqlSessionFactory객체 생성 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- DataSource 지정 -->
+		<property name="dataSource" ref="dataSource"/>
+		<!-- 환경 설정 파일 경로 지정 -->
+		<property name="configLocation" value="classpath:mybatis/mybatis-config.xml"/>
+		<!-- 매퍼 파일 경로 지정 -->
+		<property name="mapperLocations" value="classpath:mybatis/mappers/*.xml"/>
+	</bean>
+        
+	<!-- Mybatis연동 객체 -->
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"/>
+	</bean>	
+		
+</beans>

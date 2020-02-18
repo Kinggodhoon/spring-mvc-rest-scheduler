@@ -35,4 +35,15 @@ public class UserServiceImpl implements UserService {
 		return result;
 	}
 
+	@Override
+	public int check(String username) {
+		int result = 0;
+		if(userDao.get(username) == null) {
+			result = 1;
+		}
+		
+		return result;
+	}
+
+	
 }

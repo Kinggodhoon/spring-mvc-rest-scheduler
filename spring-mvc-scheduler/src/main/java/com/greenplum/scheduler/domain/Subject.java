@@ -9,4 +9,5 @@ public class Subject {
 	private int starttime;
 	private int endtime;
 	private int wday;
+	private String color;
 }

@@ -7,4 +7,6 @@ public interface UserService {
 	public int insert(User user);
 	
 	public int login(User loginUser);
+	
+	public int check(String username);
 }

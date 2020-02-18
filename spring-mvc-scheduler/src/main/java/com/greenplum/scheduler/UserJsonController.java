@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.greenplum.scheduler.domain.User;
 import com.greenplum.scheduler.service.UserService;
 
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @CrossOrigin("*")
 public class UserJsonController {
@@ -22,13 +24,9 @@ public class UserJsonController {
 	private UserService userService;
 	
 	@PostMapping("/api/user")
-	private Map<String,Object> register(@RequestBody Map<String,Object> body){
+	@ApiOperation(value="회원가입", notes="성공시 DB에 유저 정보를 저장 후 1을 반환합니다")
+	private Map<String,Object> register(@RequestBody User user){
 		Map<String,Object> map = new HashMap<>();
-		
-		User user = new User();
-		
-		user.setUsername(body.get("username").toString());
-		user.setUserpw(BCrypt.hashpw(body.get("userpw").toString(), BCrypt.gensalt()));
 		
 		int result = userService.insert(user);
 		
@@ -38,13 +36,9 @@ public class UserJsonController {
 	}
 	
 	@PostMapping("/api/user/login")
-	private Map<String,Object> login(@RequestBody Map<String,Object> body){
+	@ApiOperation(value="로그인", notes="로그인 성공시 1을 반환합니다")
+	private Map<String,Object> login(@RequestBody User user){
 		Map<String,Object> map = new HashMap<>();
-		
-		User user = new User();
-		
-		user.setUsername(body.get("username").toString());
-		user.setUserpw(body.get("userpw").toString());
 		
 		int result = userService.login(user);
 		

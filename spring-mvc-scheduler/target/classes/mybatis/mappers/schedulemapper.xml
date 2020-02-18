@@ -7,11 +7,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<!-- 삽입 -->
 	<insert id="insert" parameterType="Schedule">
-		insert into user(username,userpw) values(#{username},#{userpw})
+		insert into schedule(userid,subjectid) values(#{userid},#{subjectid})
 	</insert>
 	
 	<!-- 유저 스케쥴 조회 -->
-	<select id="get" parameterType="java.lang.Integer" resultType="Subject">
+	<select id="list" parameterType="java.lang.Integer" resultType="Subject">
 		select sc.subjectid, sb.subjectname, sb.starttime, sb.endtime, sb.wday, sb.color from schedule as sc join subject as sb on sc.subjectid = sb.subjectid where sc.userid = #{userid} order by sb.wday, sb.starttime desc
 	</select>
 

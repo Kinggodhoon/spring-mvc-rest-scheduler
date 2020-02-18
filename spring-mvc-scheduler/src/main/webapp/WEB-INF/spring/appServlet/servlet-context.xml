@@ -26,6 +26,10 @@
 	<!-- !!필수!! Controller가 처리하지 못하는 요청은 WAS에게 처리하도록 해주는 설정 -->
 	<default-servlet-handler/>
 	
+	<beans:bean id="swagger2Config" class="springfox.documentation.swagger2.configuration.Swagger2DocumentationConfiguration">
+	</beans:bean>
 	
+	<resources location="classpath:/META-INF/resources/" mapping="swagger-ui.html"></resources>
+	<resources location="classpath:/META-INF/resources/webjars/" mapping="/webjars/**"></resources>
 	
 </beans:beans>

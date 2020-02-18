@@ -17,6 +17,14 @@ import com.greenplum.scheduler.domain.Schedule;
 import com.greenplum.scheduler.domain.Subject;
 import com.greenplum.scheduler.service.ScheduleService;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 @RestController
 @CrossOrigin("*")
 public class ScheduleJsonController {
@@ -24,23 +32,21 @@ public class ScheduleJsonController {
 	@Autowired
 	private ScheduleService scheduleService;
 	
+	
 	@PostMapping("/schedule")
-	public Map<String,Object> insert(@RequestBody List<Map<String,Object>> body){
+	@ApiOperation(value="시간표수정", notes="성공시 회원의 시간표를 초기화 후 삽입한 시간표로 수정합니다.")
+	@ApiResponses({
+		@ApiResponse(code=200, message="수정 성공"),
+		@ApiResponse(code=400, message="잘못된 접근"),
+		@ApiResponse(code=500, message="서버 에러")
+	})
+	public Map<String,Object> insert(@RequestBody List<Schedule> scheduleList){
 		Map<String,Object> map = new HashMap<>();
 		
-		int userid = Integer.parseInt(body.get(0).get("userid").toString());
-		
-		List<Schedule> list = new ArrayList<>();
-		
-		for(Map<String,Object> sc : body) {
-			Schedule schedule = new Schedule();
-			schedule.setUserid(userid);
-			schedule.setSubjectid(Integer.parseInt(sc.get("subjectid").toString()));
-			list.add(schedule);
-		}
+		int userid = scheduleList.get(0).getUserid();
 		
 		scheduleService.init(userid);
-		int result = scheduleService.insert(list);
+		int result = scheduleService.insert(scheduleList);
 		
 		map.put("result", result);
 		
@@ -48,6 +54,7 @@ public class ScheduleJsonController {
 	}
 	
 	@GetMapping("/schdule/{userid}")
+	@ApiOperation(value="시간표 조회", notes="성공시 회원 코드로 시간표를 조회해서 리스트를 반환합니다.")
 	public List<Subject> list(@PathVariable int userid){
 		return scheduleService.list(userid);
 	}

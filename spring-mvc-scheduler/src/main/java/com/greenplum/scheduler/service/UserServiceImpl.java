@@ -23,16 +23,16 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public int login(User loginUser) {
-		int result = 0;
-		
+	public User login(User loginUser) {
 		User user = userDao.get(loginUser.getUsername());
 		
 		if(BCrypt.checkpw(loginUser.getUserpw(), user.getUserpw())) {
-			result = 1;
+			user.setUserpw(null);;
+		}else {
+			user = null;
 		}
 		
-		return result;
+		return user;
 	}
 
 	@Override

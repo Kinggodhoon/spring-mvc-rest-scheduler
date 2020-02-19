@@ -1,9 +1,11 @@
 package com.greenplum.scheduler.domain;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
+@ApiModel
 public class User {
 	@ApiModelProperty(name="userid", notes="number of the user",hidden=true)
 	private int userid;

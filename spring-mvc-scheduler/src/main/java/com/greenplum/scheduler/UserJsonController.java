@@ -12,15 +12,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.greenplum.scheduler.domain.User;
+import com.greenplum.scheduler.model.ResponseResult;
+import com.greenplum.scheduler.model.UserParameter;
 import com.greenplum.scheduler.service.UserService;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.Example;
 import io.swagger.annotations.ExampleProperty;
+import springfox.documentation.schema.plugins.SchemaPluginsManager;
 
 @RestController
 @CrossOrigin("*")
@@ -31,16 +36,15 @@ public class UserJsonController {
 	
 	@PostMapping("/api/user")
 	@ApiOperation(value="회원가입", notes="성공시 DB에 유저 정보를 저장 후 1을 반환합니다")
-	private Map<String,Object> register(@RequestBody User user){
-		Map<String,Object> map = new HashMap<>();
+	private ResponseResult register(@RequestBody User user){
 		
 		user.setUserpw(BCrypt.hashpw(user.getUserpw(), BCrypt.gensalt()));
 		
 		int result = userService.insert(user);
 		
-		map.put("result", result);
+		ResponseResult rr = new ResponseResult(result);
 		
-		return map;
+		return rr;
 	}
 	
 	@PostMapping("/api/user/login")
@@ -62,16 +66,15 @@ public class UserJsonController {
 	
 	@PostMapping("/api/user/check")
 	@ApiOperation(value="아이디중복검사", notes="중복되는 아이디가 없을 시 1을 반환, 있을 시 0을 반환합니다")
-	@ApiImplicitParams({
-        @ApiImplicitParam(name = "username", value = "username", required = true, dataType = "string", paramType = "query", defaultValue = "string") })
-	private Map<String,Object> check(@RequestBody Map<String,String> body){
-		Map<String,Object> map = new HashMap<>();
-		String username = body.get("username").toString();
+	@ApiImplicitParam(name = "body", value = "username", required = true,dataType="UserParameter")
+	private ResponseResult check(@RequestBody UserParameter body){
+		String username = body.getUsername();
+		
 		int result = userService.check(username);
 		
-		map.put("result", result);
+		ResponseResult rr = new ResponseResult(result);
 		
-		return map;
+		return rr;
 	}
 	
 }

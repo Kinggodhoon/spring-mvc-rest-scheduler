@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.greenplum.scheduler.domain.Schedule;
 import com.greenplum.scheduler.domain.Subject;
+import com.greenplum.scheduler.model.ResponseResult;
 import com.greenplum.scheduler.service.ScheduleService;
 
 import io.swagger.annotations.ApiImplicitParam;
@@ -42,17 +43,15 @@ public class ScheduleJsonController {
 		@ApiResponse(code=400, message="잘못된 접근"),
 		@ApiResponse(code=500, message="서버 에러")
 	})
-	public Map<String,Object> insert(@RequestBody List<Schedule> scheduleList){
-		Map<String,Object> map = new HashMap<>();
-		System.out.println(scheduleList);
+	public ResponseResult insert(@RequestBody List<Schedule> scheduleList){
 		int userid = scheduleList.get(0).getUserid();
 		
 		scheduleService.init(userid);
 		int result = scheduleService.insert(scheduleList);
 		
-		map.put("result", result);
+		ResponseResult rr = new ResponseResult(result);
 		
-		return map;
+		return rr;
 	}
 	
 	@GetMapping("/api/schedule/{userid}")
